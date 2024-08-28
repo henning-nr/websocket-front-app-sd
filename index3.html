@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat com Socket.IO</title>
+</head>
+<body>
+    <input type="text" id="messageInput">
+    <button onclick="sendMessage()">Enviar</button>
+    <ul id="messages"></ul>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js"></script>
+    <script>
+        const socket = io('https://bbac24c6-2491-49b8-a571-40ac4d68abce-00-cx9wdtbb7si1.kirk.replit.dev/');
+
+        socket.on('connect', () => {
+            console.log('Conectado ao servidor');
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Desconectado do servidor');
+        });
+
+        socket.on('message', function (message) {
+            const messages = document.getElementById('messages');
+            const li = document.createElement('li');
+            li.appendChild(document.createTextNode(message));
+            messages.appendChild(li);
+        });
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value;
+            socket.emit('message', message);
+            input.value = '';
+        }
+    </script>
+</body>
+</html>
